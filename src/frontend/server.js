@@ -5,6 +5,12 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/config', (req, res) => {
+  res.json({
+    apiUrl: process.env.services__backend__http__0 + '/api'
+  });
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

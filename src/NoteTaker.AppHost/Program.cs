@@ -12,13 +12,13 @@ var backend = builder.AddProject<Projects.Backend>("backend")
     .WithReference(db)
     .WithReference(messaging);
 
-var aiService = builder.AddPythonApp("ai-service", "../ai-service", "main.py")
+var aiService = builder.AddUvicornApp("ai-service", "../ai-service", "main:app")
     .WithReference(db)
     .WithReference(messaging)
-    .WithHttpEndpoint(env: "PORT", port: 8000)
     .WithExternalHttpEndpoints();
 
-builder.AddNpmApp("frontend", "../frontend")
+builder.AddJavaScriptApp("frontend", "../frontend")
+    .WithRunScript("start")
     .WithReference(backend)
     .WithReference(aiService)
     .WithHttpEndpoint(targetPort: 3000, name: "http")

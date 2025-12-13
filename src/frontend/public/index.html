@@ -303,11 +303,21 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:5000/api';
+        let API_URL = 'http://localhost:5000/api';
         let autoRefreshInterval;
 
         // Load tasks on page load
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const configResponse = await fetch('/config');
+                const config = await configResponse.json();
+                if (config.apiUrl) {
+                    API_URL = config.apiUrl;
+                }
+            } catch (e) {
+                console.error('Failed to load config, using default API URL', e);
+            }
+            
             loadTasks();
             startAutoRefresh();
         });
