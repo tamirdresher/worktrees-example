@@ -13,7 +13,7 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 
 // Configure PostgreSQL with Aspire (falls back to manual config for Docker)
-if (builder.Configuration.GetConnectionString("complexdb") != null)
+if (builder.Configuration.GetConnectionString("notetakerdb") != null)
 {
     // Aspire mode - use Aspire's PostgreSQL integration
     builder.AddNpgsqlDbContext<AppDbContext>("notetakerdb");

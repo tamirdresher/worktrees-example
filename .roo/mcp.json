@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "aspire-dashboard": {
+      "type": "streamable-http",
+       "url": "http://localhost:23231/mcp",
+      "headers": {
+        "x-mcp-api-key": "9e9af7c9965c21cf2b6f88a0e4997ff3"
+      },
+      "alwaysAllow": [
+        "execute_resource_command",
+        "list_traces",
+        "list_trace_structured_logs",
+        "list_console_logs",
+        "list_resources",
+        "list_structured_logs"
+      ],
+      "timeout": 300
+    }
+  }
+}

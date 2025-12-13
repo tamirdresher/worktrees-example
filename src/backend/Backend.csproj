@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\aspire\NoteTaker.ServiceDefaults\NoteTaker.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\NoteTaker.ServiceDefaults\NoteTaker.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

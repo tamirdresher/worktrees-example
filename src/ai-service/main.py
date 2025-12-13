@@ -30,7 +30,7 @@ async def startup_event():
     consumer = TaskConsumer()
     consumer_thread = threading.Thread(target=consumer.start, daemon=True)
     consumer_thread.start()
-    print("✓ RabbitMQ consumer started in background")
+    print("[OK] RabbitMQ consumer started in background")
 
 @app.on_event("shutdown")
 async def shutdown_event():
