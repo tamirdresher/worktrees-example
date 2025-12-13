@@ -1,0 +1,13 @@
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\bin\Debug\net10.0\NoteTaker.ServiceDefaults.deps.json
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\bin\Debug\net10.0\NoteTaker.ServiceDefaults.dll
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\bin\Debug\net10.0\NoteTaker.ServiceDefaults.pdb
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\NoteTaker.ServiceDefaults.csproj.AssemblyReference.cache
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\NoteTaker.ServiceDefaults.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\NoteTaker.ServiceDefaults.AssemblyInfoInputs.cache
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\NoteTaker.ServiceDefaults.AssemblyInfo.cs
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\NoteTaker.ServiceDefaults.csproj.CoreCompileInputs.cache
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\NoteTaker.ServiceDefaults.sourcelink.json
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\NoteTaker.ServiceDefaults.dll
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\refint\NoteTaker.ServiceDefaults.dll
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\NoteTaker.ServiceDefaults.pdb
+C:\Users\tamirdresher\source\repos\note-taker\aspire\NoteTaker.ServiceDefaults\obj\Debug\net10.0\ref\NoteTaker.ServiceDefaults.dll

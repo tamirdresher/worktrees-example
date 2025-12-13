@@ -1,0 +1,25 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+
+  <ItemGroup>
+    <ProjectReference Include="..\NoteTaker.ServiceDefaults\NoteTaker.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\src\backend\Backend.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.5.2" />
+    <PackageReference Include="Aspire.Hosting.Python" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.0.2" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="13.0.2" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="13.0.2" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>ccb3a1a7-f3c3-4d30-a35d-c33336ec2e6e</UserSecretsId>
+    <NoWarn>$(NoWarn);ASPIREHOSTINGPYTHON001</NoWarn>
+  </PropertyGroup>
+
+</Project>

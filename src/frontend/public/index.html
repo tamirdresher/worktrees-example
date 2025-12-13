@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .tasks-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .refresh-btn {
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+
+        .task-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .task-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .task-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-status {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-category {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .badge-sentiment {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .badge-sentiment.negative {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .badge-sentiment.neutral {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .badge-pending {
+            background: #fff8e1;
+            color: #f57f17;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            padding: 5px 15px;
+            font-size: 14px;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .cache-indicator {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #4caf50;
+            color: white;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .cache-indicator.from-db {
+            background: #2196f3;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Task Management System</h1>
+            <p class="subtitle">Powered by .NET, PostgreSQL, Redis, RabbitMQ & AI Analysis</p>
+        </header>
+
+        <div class="card">
+            <h2>➕ Create New Task</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" placeholder="Enter task title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" placeholder="Enter task description" required></textarea>
+                </div>
+                <button type="submit">Create Task</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="tasks-header">
+                <h2>📋 Your Tasks <span id="cacheIndicator"></span></h2>
+                <button class="refresh-btn" onclick="loadTasks()">🔄 Refresh</button>
+            </div>
+            <div id="taskList" class="task-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading tasks...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let autoRefreshInterval;
+
+        // Load tasks on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTasks();
+            startAutoRefresh();
+        });
+
+        // Handle form submission
+        document.getElementById('taskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/tasks`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title, description })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('taskForm').reset();
+                    loadTasks();
+                    alert('✓ Task created successfully! AI analysis will be available shortly.');
+                } else {
+                    alert('✗ Failed to create task');
+                }
+            } catch (error) {
+                console.error('Error creating task:', error);
+                alert('✗ Error creating task. Make sure the backend is running.');
+            }
+        });
+
+        // Load all tasks
+        async function loadTasks() {
+            const taskList = document.getElementById('taskList');
+            const cacheIndicator = document.getElementById('cacheIndicator');
+            
+            try {
+                const response = await fetch(`${API_URL}/tasks`);
+                const data = await response.json();
+                
+                const tasks = data.tasks || [];
+                const source = data.source || 'unknown';
+                
+                // Update cache indicator
+                if (source === 'cache') {
+                    cacheIndicator.innerHTML = '<span class="cache-indicator">⚡ From Cache</span>';
+                } else {
+                    cacheIndicator.innerHTML = '<span class="cache-indicator from-db">💾 From Database</span>';
+                }
+                
+                if (tasks.length === 0) {
+                    taskList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📝</div>
+                            <h3>No tasks yet</h3>
+                            <p>Create your first task to get started!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                taskList.innerHTML = tasks.map(task => {
+                    const aiAnalyzed = task.aiCategory && task.aiSentiment;
+                    const sentimentClass = task.aiSentiment ? task.aiSentiment.toLowerCase() : '';
+                    
+                    return `
+                        <div class="task-item">
+                            <div class="task-header">
+                                <div>
+                                    <div class="task-title">${escapeHtml(task.title)}</div>
+                                    <div class="timestamp">Created: ${new Date(task.createdAt).toLocaleString()}</div>
+                                </div>
+                                <div class="task-actions">
+                                    <button class="btn-delete" onclick="deleteTask('${task.id}')">🗑️ Delete</button>
+                                </div>
+                            </div>
+                            <div class="task-description">${escapeHtml(task.description)}</div>
+                            <div class="task-meta">
+                                <span class="badge badge-status">${task.status}</span>
+                                ${aiAnalyzed 
+                                    ? `
+                                        <span class="badge badge-category">📁 ${task.aiCategory}</span>
+                                        <span class="badge badge-sentiment ${sentimentClass}">
+                                            ${getSentimentIcon(task.aiSentiment)} ${task.aiSentiment}
+                                        </span>
+                                    `
+                                    : '<span class="badge badge-pending">⏳ AI analyzing...</span>'
+                                }
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+                taskList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <h3>Error loading tasks</h3>
+                        <p>Make sure the backend is running on port 5000</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Delete task
+        async function deleteTask(id) {
+            if (!confirm('Are you sure you want to delete this task?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/tasks/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    loadTasks();
+                } else {
+                    alert('✗ Failed to delete task');
+                }
+            } catch (error) {
+                console.error('Error deleting task:', error);
+                alert('✗ Error deleting task');
+            }
+        }
+
+        // Auto-refresh every 5 seconds to show AI analysis updates
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                loadTasks();
+            }, 5000);
+        }
+
+        // Helper functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function getSentimentIcon(sentiment) {
+            const icons = {
+                'positive': '😊',
+                'neutral': '😐',
+                'negative': '😟'
+            };
+            return icons[sentiment.toLowerCase()] || '🤔';
+        }
+    </script>
+</body>
+</html>

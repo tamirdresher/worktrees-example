@@ -1,0 +1,13 @@
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\bin\Debug\net10.0\ComplexApp.ServiceDefaults.deps.json
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\bin\Debug\net10.0\ComplexApp.ServiceDefaults.dll
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\bin\Debug\net10.0\ComplexApp.ServiceDefaults.pdb
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ComplexApp.ServiceDefaults.csproj.AssemblyReference.cache
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ComplexApp.ServiceDefaults.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ComplexApp.ServiceDefaults.AssemblyInfoInputs.cache
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ComplexApp.ServiceDefaults.AssemblyInfo.cs
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ComplexApp.ServiceDefaults.csproj.CoreCompileInputs.cache
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ComplexApp.ServiceDefaults.sourcelink.json
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ComplexApp.ServiceDefaults.dll
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\refint\ComplexApp.ServiceDefaults.dll
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ComplexApp.ServiceDefaults.pdb
+C:\Users\tamirdresher\source\repos\aspire-workshop\complex-comparison\aspire\ComplexApp.ServiceDefaults\obj\Debug\net10.0\ref\ComplexApp.ServiceDefaults.dll
