@@ -13,6 +13,7 @@
         "ASPIRE_DASHBOARD_MCP_ENDPOINT_URL": "http://localhost:23231",
         "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22049",
         "ASPIRE_ALLOW_UNSECURED_TRANSPORT": "true"
+    
       }
     },
     "http": {

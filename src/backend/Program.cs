@@ -3,6 +3,7 @@ using Backend.Models;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using NoteTaker.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -145,13 +146,17 @@ app.MapGet("/api/tasks/{id:guid}", async (Guid id, AppDbContext db) =>
 .WithName("GetTask");
 
 // Create new task
-app.MapPost("/api/tasks", async (TaskItem task, AppDbContext db, RedisCacheService cache, RabbitMQService rabbitMQ) =>
+app.MapPost("/api/tasks", async (TaskItem task, AppDbContext db, RedisCacheService cache, RabbitMQService rabbitMQ, ILogger<Program> logger) =>
 {
     task.Id = Guid.NewGuid();
     task.CreatedAt = DateTime.UtcNow;
     task.UpdatedAt = DateTime.UtcNow;
     task.Status = "pending";
-    
+    if (task.Description.Contains("fail"))
+    {
+        logger.LogError("The word 'fail' appeared in the task description, was i supposed to fail?, i think so");
+        throw new ArgumentException("why did you sent this value?");
+    }
     db.Tasks.Add(task);
     await db.SaveChangesAsync();
     

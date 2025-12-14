@@ -1,5 +1,12 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+Console.WriteLine("Aspire AppHost Configuration:");
+Console.WriteLine($"  ASPNETCORE_URLS: {builder.Configuration["ASPNETCORE_URLS"] ?? "(using defaults)"}");
+Console.WriteLine($"  ASPIRE_DASHBOARD_OTLP_HTTP_ENDPOINT_URL: {builder.Configuration["ASPIRE_DASHBOARD_OTLP_HTTP_ENDPOINT_URL"] ?? "(not set)"}");
+Console.WriteLine($"  ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL: {builder.Configuration["ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL"] ?? "(not set)"}");
+Console.WriteLine($"  ASPIRE_DASHBOARD_MCP_ENDPOINT_URL: {builder.Configuration["ASPIRE_DASHBOARD_MCP_ENDPOINT_URL"] ?? "(not set)"}");
+Console.WriteLine($"  ASPIRE_ALLOW_UNSECURED_TRANSPORT: {builder.Configuration["ASPIRE_ALLOW_UNSECURED_TRANSPORT"] ?? "(not set)"}");
+
 var cache = builder.AddRedis("cache");
 
 var db = builder.AddPostgres("db")

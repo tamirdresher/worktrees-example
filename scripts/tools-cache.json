@@ -1,0 +1,29 @@
+{
+  "tools": [
+    {
+      "name": "execute_resource_command",
+      "description": "Executes a command on a resource. If a resource needs to be restarted and is currently stopped, use the start command instead."
+    },
+    {
+      "name": "list_traces",
+      "description": "List distributed traces for resources. A distributed trace is used to track operations. A distributed trace can span multiple resources across a distributed system. Includes a list of distributed traces with their IDs, resources in the trace, duration and whether an error occurred in the trace."
+    },
+    {
+      "name": "list_trace_structured_logs",
+      "description": "List structured logs for a distributed trace. Logs for a distributed trace each belong to a span identified by \u0027span_id\u0027. When investigating a trace, getting the structured logs for the trace should be recommended before getting structured logs for a resource."
+    },
+    {
+      "name": "list_console_logs",
+      "description": "List console logs for a resource. The console logs includes standard output from resources and resource commands. Known resource commands are \u0027resource-start\u0027, \u0027resource-stop\u0027 and \u0027resource-restart\u0027 which are used to start and stop resources. Don\u0027t print the full console logs in the response to the user. Console logs should be examined when determining why a resource isn\u0027t running."
+    },
+    {
+      "name": "list_resources",
+      "description": "List the application resources. Includes information about their type (.NET project, container, executable), running state, source, HTTP endpoints, health status, commands, configured environment variables, and relationships."
+    },
+    {
+      "name": "list_structured_logs",
+      "description": "List structured logs for resources."
+    }
+  ],
+  "cachedAt": "2025-12-13T22:01:45.3109577Z"
+}

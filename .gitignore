@@ -405,3 +405,4 @@ complex-comparison/aspire/ComplexApp.AppHost/bin/Debug/net10.0/ComplexApp.AppHos
 complex-comparison/aspire/ComplexApp.AppHost/bin/Debug/net10.0/ComplexApp.AppHost.exe
 complex-comparison/aspire/ComplexApp.AppHost/bin/Debug/net10.0/ComplexApp.AppHost.pdb
 complex-comparison/aspire/ComplexApp.AppHost/bin/Debug/net10.0/ComplexApp.AppHost.runtimeconfig.json
+scripts/settings.json
