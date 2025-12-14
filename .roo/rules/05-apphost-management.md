@@ -30,7 +30,7 @@ powershell.exe -File ./scripts/kill-apphost.ps1 -ProcessId <pid>
 powershell.exe -File ./scripts/kill-apphost.ps1 -ProcessId <pid> -Force
 
 # Kill ALL AppHost instances from this repository
-powershell.exe -File ./scripts/kill-apphost.ps1 -F
+powershell.exe -File ./scripts/kill-apphost.ps1 -All
 
 # List running instances
 powershell.exe -File ./scripts/list-apphosts.ps1
@@ -72,7 +72,7 @@ powershell.exe -File ./scripts/list-apphosts.ps1
 .\scripts\kill-apphost.ps1 -ProcessId <pid> -Force
 
 # Kill ALL AppHost instances from this repository
-.\scripts\kill-apphost.ps1 -F
+.\scripts\kill-apphost.ps1 -All
 
 # List running instances
 .\scripts\list-apphosts.ps1
@@ -168,7 +168,7 @@ cd C:\repos\clone-b
 **Option 1: Kill all AppHost instances from this repo (recommended)**
 ```powershell
 # Kill all AppHost instances running from this repository
-.\scripts\kill-apphost.ps1 -F
+.\scripts\kill-apphost.ps1 -All
 ```
 
 **Option 2: Kill specific instances by PID**
@@ -257,7 +257,7 @@ If resources show as "Failed", "Unhealthy", or stuck in "Waiting" state in the A
 **Quick cleanup (recommended):**
 ```powershell
 # Kill all AppHost instances from this repository
-.\scripts\kill-apphost.ps1 -F
+.\scripts\kill-apphost.ps1 -All
 ```
 
 **Or manual cleanup by PID:**
