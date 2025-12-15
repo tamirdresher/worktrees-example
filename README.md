@@ -1,111 +1,82 @@
-# Complex Comparison Project
+# .NET Aspire with Git Worktrees & AI Agents
 
 ## Project Overview
-This project is a sample polyglot application designed to demonstrate and compare two different orchestration approaches: traditional Docker Compose and the new .NET Aspire.
 
-The application consists of multiple services and infrastructure components:
-- **Frontend**: A Node.js application serving the user interface.
-- **Backend**: A .NET Web API handling business logic.
-- **AI Service**: A Python service for AI-related tasks.
-- **Infrastructure**:
-  - **Redis**: For caching.
-  - **PostgreSQL**: For persistent storage.
-  - **RabbitMQ**: For message queuing.
+This project is a polyglot cloud-native application (C#, Node.js, Python) designed to demonstrate a modern development workflow combining **.NET Aspire**, **Git Worktrees**, and **AI Agents**.
 
-## Folder Structure
-This project uses a "Shared Source" strategy, where the application code is decoupled from the orchestration logic.
+The core goal is to solve the "port conflict" problem when running multiple instances of a distributed application simultaneously. This allows you to have an AI agent (like Roo) working on a feature branch in a separate worktree while you continue debugging or developing on the `main` branch in another worktree, without them stepping on each other's toes.
 
-- **`src/`**: Contains the source code for all application services (Frontend, Backend, AI Service).
-- **`docker/`**: Contains the Docker Compose configuration files for traditional container orchestration.
-- **`aspire/`**: Contains the .NET Aspire AppHost project for code-first orchestration.
+## The "Worktree" Workflow
 
-## How to Run with Docker Compose
+### The Problem
+In a typical .NET Aspire project, ports for the Dashboard, OTLP endpoint, and resources are often static or default to specific values. If you try to run the application from two different directories (e.g., `main` and `feature-x`), they will crash because they compete for the same ports.
 
-To run the application using Docker Compose:
+### The Solution
+This project uses a set of **management scripts** that wrap the AppHost startup. These scripts:
+1.  **Dynamically allocate free ports** for the Aspire Dashboard, OTLP, and internal service communication.
+2.  **Configure environment variables** automatically so the application knows which ports to use.
+3.  **Enable Port Isolation**, allowing multiple instances of the full application stack to run side-by-side on the same machine.
 
-1.  Open a terminal and navigate to the `docker` directory:
-    ```bash
-    cd complex-comparison/docker
-    ```
-2.  Start the services:
-    ```bash
-    docker-compose up
-    ```
+## AI Agent Integration (MCP)
 
-**Note:** When using Docker Compose, you are responsible for manually managing port conflicts, environment variables, and viewing logs for each container separately.
+This project includes a **Model Context Protocol (MCP)** server that acts as a bridge between your AI Agent and the running Aspire application.
 
-## How to Run with .NET Aspire
+When you start the application using the scripts, an MCP server is spun up that allows agents like Roo to:
+*   **List Resources:** See what services are running and their health status.
+*   **Read Logs:** Access console and structured logs to diagnose issues.
+*   **Trace Requests:** Follow distributed traces across the .NET, Node.js, and Python services.
+*   **Execute Commands:** Restart services or trigger specific actions directly from the chat interface.
 
-To run the application using .NET Aspire:
+This enables a workflow where the AI agent can autonomously build, run, and debug the application within its own isolated worktree.
 
-1.  Open a terminal and navigate to the AppHost project directory:
-    ```bash
-    cd note-taker/aspire/NoteTaker.AppHost
-    ```
-2.  Run the application:
-    ```bash
-    dotnet run
-    ```
+## 🚀 How to Run
 
-**Benefits of .NET Aspire:**
-- **Unified Dashboard**: View logs, traces, and metrics for all services in one place.
-- **Service Discovery**: Automatic injection of connection strings and endpoints without manual wiring.
-- **No YAML**: Orchestration is defined in C#, allowing for compile-time checks and refactoring support.
+**⚠️ IMPORTANT:** Do NOT use `dotnet run` directly in the AppHost directory. You must use the provided scripts to ensure port isolation works.
 
-## Key Features
+### 1. Start the Application
 
-### Python Support
-Aspire now treats Python as a first-class citizen with the `AddPythonApp` method. Unlike Docker Compose, where Python apps are just generic containers defined in YAML, Aspire allows you to orchestrate Python resources directly in C#. This enables native execution on the host machine, providing a significantly faster inner loop debugging experience compared to rebuilding containers.
-
-Additionally, `AddPythonApp` automatically manages the Python virtual environment for you. It creates the environment if it's missing and installs dependencies from `requirements.txt`. This simplifies the "Clone & Run" experience, eliminating the need to manually set up virtual environments or build Docker images before starting development.
-
-### Observability
-We've added OpenTelemetry to the Python service to demonstrate Aspire's powerful observability features. Aspire *automatically* injects the OTLP endpoint configuration (`OTEL_EXPORTER_OTLP_ENDPOINT`) into the service, so no manual wiring is needed.
-
-In contrast, achieving this with Docker Compose would typically require manually configuring an OpenTelemetry collector, setting up networking between containers, and managing environment variables for each service.
-
-### Parameters vs. Environment Variables
-In Docker Compose, secrets and configuration often end up hardcoded in YAML files or managed manually through `.env` files. Aspire introduces a more secure and flexible approach using Parameters.
-
-For example, the `dbPassword` parameter is defined in code using `AddParameter`. This allows you to provide values securely via configuration providers like User Secrets or Azure Key Vault without modifying the orchestration code itself.
-
-### Integration Testing
-One of Aspire's most powerful features is its **built-in testing support**. The `ComplexApp.Tests` project demonstrates how to write integration tests that spin up the entire distributed application with real infrastructure.
-
-**Key Testing Benefits:**
-- ✅ **Real Infrastructure**: Tests run against actual PostgreSQL, Redis, and RabbitMQ containers (not mocks)
-- ✅ **Automatic Resource Management**: Containers start before tests, clean up after
-- ✅ **Service Discovery**: HTTP clients automatically discover service endpoints
-- ✅ **End-to-End Testing**: Test complete flows across multiple services
-- ✅ **Fast Feedback**: Parallel test execution with isolated resources
-
-To run the tests:
-```bash
-cd complex-comparison/aspire
-dotnet test
+**Windows (PowerShell):**
+```powershell
+.\scripts\start-apphost.ps1
 ```
 
-See [`NoteTaker.Tests/README.md`](./aspire/NoteTaker.Tests/README.md) for detailed documentation on Aspire's testing capabilities.
+**Linux/macOS (Bash):**
+```bash
+./scripts\start-apphost.sh
+```
 
-**Docker Compose Testing**: With Docker Compose, you would need to manually:
-1. Start containers with `docker-compose up`
-2. Wait for services to be ready
-3. Run tests against hardcoded ports
-4. Clean up containers manually
-5. Handle port conflicts and race conditions
+The script will output the **Dashboard URL** and the **Process ID**.
 
-**Aspire Testing**: One command (`dotnet test`) automatically handles everything - spinning up containers, discovering endpoints, running tests, and cleaning up.
+### 2. Stop the Application
 
-## Comparison Summary
+To clean up resources properly (including child processes), use the kill script.
 
-| Feature | Docker Compose | .NET Aspire |
-| :--- | :--- | :--- |
-| **Configuration** | YAML (Declarative) | C# (Imperative/Code-first) |
-| **Service Discovery** | Manual (DNS names, env vars) | Automatic (Service references) |
-| **Observability** | Manual OTel wiring / Disparate tools | Auto-injected OTel / Integrated Dashboard |
-| **Developer Experience** | Manual venv/container setup | Auto-managed venv & dependencies |
-| **Polyglot Support** | Generic Containers | First-class integrations (e.g., Python, Node.js) |
-| **Secrets Management** | `.env` files / Hardcoded | Abstracted Parameters (User Secrets, Key Vault) |
-| **Integration Testing** | Manual setup, hardcoded ports, cleanup scripts | Built-in `Aspire.Hosting.Testing`, automatic resource management |
+**Windows (PowerShell):**
+```powershell
+# Kill all instances from this repo
+.\scripts\kill-apphost.ps1 -All
+```
 
-This comparison highlights how .NET Aspire simplifies the complexity of managing multi-service applications during development compared to manual Docker Compose configuration.
+**Linux/macOS (Bash):**
+```bash
+# Kill all instances from this repo
+./scripts/kill-apphost.sh --all
+```
+
+## Architecture Stack
+
+*   **Orchestrator:** .NET Aspire
+*   **Backend:** .NET 10 Minimal API
+*   **Frontend:** Node.js (Express)
+*   **AI Service:** Python (FastAPI + TextBlob)
+*   **Infrastructure:**
+    *   PostgreSQL (Data)
+    *   Redis (Caching)
+    *   RabbitMQ (Messaging)
+*   **Observability:** OpenTelemetry (configured across all services)
+
+## Documentation
+
+For detailed instructions on the management scripts and worktree workflow, please see:
+*   [AppHost Management Rules](.roo/rules/05-apphost-management.md)
+*   [Script Documentation](docs/README-APPHOST-SCRIPTS.md)
