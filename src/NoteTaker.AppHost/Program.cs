@@ -1,7 +1,12 @@
 var gitFolderName = GitFolderResolver.GetGitFolderName();
 var dashboardAppName = string.IsNullOrEmpty(gitFolderName) ? "NoteTaker" : $"NoteTaker-{gitFolderName}";
 
-var builder = DistributedApplication.CreateBuilder(args);
+var builder = DistributedApplication.CreateBuilder(new DistributedApplicationOptions()
+{
+    Args = args,
+    DashboardApplicationName = dashboardAppName,
+});
+
 
 Console.WriteLine("Aspire AppHost Configuration:");
 Console.WriteLine($"  ASPNETCORE_URLS: {builder.Configuration["ASPNETCORE_URLS"] ?? "(using defaults)"}");
