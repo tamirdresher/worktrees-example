@@ -27,7 +27,7 @@ powershell.exe -File ./scripts/stop-apphost.ps1 -ProcessId <pid>
 powershell.exe -File ./scripts/kill-apphost.ps1 -ProcessId <pid>
 
 # Kill specific AppHost instance and all child processes (force)
-powershell.exe -File ./scripts/kill-apphost.ps1 -ProcessId <pid> -Force
+powershell.exe -File ./scripts/kill-apphost.ps1 -ProcessId <pid> -Tree
 
 # Kill ALL AppHost instances from this repository
 powershell.exe -File ./scripts/kill-apphost.ps1 -All
@@ -47,11 +47,11 @@ powershell.exe -File ./scripts/list-apphosts.ps1
 # Kill specific AppHost instance by PID
 ./scripts/kill-apphost.sh <pid>
 
-# Kill specific AppHost instance and all child processes (force)
-./scripts/kill-apphost.sh <pid> -f
+# Kill specific AppHost instance and all child processes 
+./scripts/kill-apphost.sh <pid> --tree
 
 # Kill ALL AppHost instances from this repository
-./scripts/kill-apphost.sh -F
+./scripts/kill-apphost.sh --all
 
 # List running instances
 ./scripts/list-apphosts.sh
@@ -68,8 +68,8 @@ powershell.exe -File ./scripts/list-apphosts.ps1
 # Kill specific AppHost instance by PID
 .\scripts\kill-apphost.ps1 -ProcessId <pid>
 
-# Kill specific AppHost instance and all child processes (force)
-.\scripts\kill-apphost.ps1 -ProcessId <pid> -Force
+# Kill specific AppHost instance and all child processes 
+.\scripts\kill-apphost.ps1 -ProcessId <pid> -Tree
 
 # Kill ALL AppHost instances from this repository
 .\scripts\kill-apphost.ps1 -All
@@ -90,10 +90,10 @@ powershell.exe -File ./scripts/list-apphosts.ps1
 ./scripts/kill-apphost.sh <pid>
 
 # Kill specific AppHost instance and all child processes (force)
-./scripts/kill-apphost.sh <pid> -f
+./scripts/kill-apphost.sh <pid> --tree
 
 # Kill ALL AppHost instances from this repository
-./scripts/kill-apphost.sh -F
+./scripts/kill-apphost.sh --all
 
 # List running instances
 ./scripts/list-apphosts.sh
@@ -145,7 +145,7 @@ The AppHost requires multiple ports:
 # ... work on your code ...
 
 # 3. When done, kill the specific instance (use PID from start output)
-.\scripts\kill-apphost.ps1 -PID 12345 -Force
+.\scripts\kill-apphost.ps1 -PID 12345 -All
 ```
 
 ### Multi-Instance Testing
@@ -177,8 +177,8 @@ cd C:\repos\clone-b
 .\scripts\list-apphosts.ps1
 
 # Kill each instance by PID (use PIDs from list output)
-.\scripts\kill-apphost.ps1 -ProcessId 12345 -Force
-.\scripts\kill-apphost.ps1 -ProcessId 67890 -Force
+.\scripts\kill-apphost.ps1 -ProcessId 12345 -All
+.\scripts\kill-apphost.ps1 -ProcessId 67890 -All
 ```
 
 ## Script Reference
@@ -212,7 +212,7 @@ If resources show as "Failed", "Unhealthy", or stuck in "Waiting" state in the A
 
 ```powershell
 # 1. Kill the AppHost (use PID from your start output or list-apphosts)
-.\scripts\kill-apphost.ps1 -PID <pid> -Force
+.\scripts\kill-apphost.ps1 -PID <pid> -Tree
 
 # 2. Restart it
 .\scripts\start-apphost.ps1
@@ -235,7 +235,7 @@ If resources show as "Failed", "Unhealthy", or stuck in "Waiting" state in the A
 .\scripts\list-apphosts.ps1
 
 # Kill each instance
-.\scripts\kill-apphost.ps1 -PID <pid> -Force
+.\scripts\kill-apphost.ps1 -PID <pid> -Tree
 
 # Try again
 .\scripts\start-apphost.ps1
@@ -244,7 +244,7 @@ If resources show as "Failed", "Unhealthy", or stuck in "Waiting" state in the A
 ### Instance Not Stopping
 ```powershell
 # Use force kill with PID
-.\scripts\kill-apphost.ps1 -PID <pid> -Force
+.\scripts\kill-apphost.ps1 -PID <pid> -Tree
 ```
 
 ### Dashboard URL Not Working
@@ -266,8 +266,8 @@ If resources show as "Failed", "Unhealthy", or stuck in "Waiting" state in the A
 .\scripts\list-apphosts.ps1
 
 # Kill each instance by PID
-.\scripts\kill-apphost.ps1 -ProcessId <pid1> -Force
-.\scripts\kill-apphost.ps1 -ProcessId <pid2> -Force
+.\scripts\kill-apphost.ps1 -ProcessId <pid1> -All
+.\scripts\kill-apphost.ps1 -ProcessId <pid2> -All
 ```
 
 ## Integration with Development Tools
@@ -277,7 +277,7 @@ When debugging or running in VS Code, ensure you're using the scripts:
 1. Open integrated terminal (Ctrl+`)
 2. Run: `.\scripts\start-apphost.ps1` (note the Process ID from output)
 3. Use VS Code to debug other projects
-4. Cleanup: `.\scripts\kill-apphost.ps1 -PID <pid> -Force`
+4. Cleanup: `.\scripts\kill-apphost.ps1 -PID <pid> -Tree`
 
 ### Visual Studio
 If running from Visual Studio:
