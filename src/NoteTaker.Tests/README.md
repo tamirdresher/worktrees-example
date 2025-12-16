@@ -79,7 +79,7 @@ dotnet test --logger "console;verbosity=detailed"
 
 ## 📊 Test Coverage
 
-### Backend API Tests
+### Backend API Tests (`IntegrationTests.cs`)
 - ✅ `Backend_HealthEndpoint_ReturnsHealthy` - Verifies service health
 - ✅ `CreateTask_StoresInDatabase_AndReturnsCreatedTask` - PostgreSQL integration
 - ✅ `GetTasks_AfterCreation_ReturnsTaskFromDatabase` - Data retrieval
@@ -97,17 +97,77 @@ dotnet test --logger "console;verbosity=detailed"
 ### Concurrency Tests
 - ✅ `MultipleParallelRequests_HandleConcurrency_Correctly` - Load testing
 
+### Frontend UI Tests with Playwright (`PlaywrightIntegrationTests.cs`)
+- ✅ `Frontend_CreateTask_AddsItemToList` - **Full end-to-end UI test**
+  - Creates task via the frontend UI
+  - Verifies task appears in the list
+  - Waits for AI analysis to complete
+  - Tests the entire user workflow
+- ✅ `Frontend_DeleteTask_RemovesItemFromList` - Delete functionality
+- ✅ `Frontend_RefreshButton_ReloadsTaskList` - Cache indicator validation
+- ✅ `Frontend_FormValidation_RequiresFields` - Form validation
+
+## 🎭 Playwright Integration Testing
+
+The `PlaywrightIntegrationTests.cs` file demonstrates how to combine Aspire distributed testing with Playwright for complete end-to-end UI testing:
+
+```csharp
+[Fact]
+public async Task Frontend_CreateTask_AddsItemToList()
+{
+    // Aspire spins up the entire distributed app
+    var frontendUrl = _app!.GetEndpoint("frontend").ToString();
+    
+    // Playwright automates the browser
+    var page = await _browser!.NewPageAsync();
+    await page.GotoAsync(frontendUrl);
+    
+    // Fill form and submit
+    await page.FillAsync("#title", "Test Task");
+    await page.FillAsync("#description", "Test Description");
+    await page.ClickAsync("button[type='submit']");
+    
+    // Verify task appears in the list
+    await page.WaitForSelectorAsync(".task-item");
+    var taskTitle = await page.Locator(".task-title").TextContentAsync();
+    taskTitle.Should().Be("Test Task");
+}
+```
+
+**Key Features:**
+- Tests the actual frontend running in Node.js
+- Validates real user interactions and UI behavior
+- Verifies the complete flow: UI → Backend → Database → AI Service
+- Runs headless Chromium for fast, reliable testing
+
 ## 🚀 Running the Tests
 
 ### Prerequisites
 - .NET 10 SDK
 - Docker Desktop running
 - Python 3.x (for AI service)
+- Playwright browsers installed (automatic on first run)
+
+### First-Time Setup
+```bash
+cd src/NoteTaker.Tests
+dotnet build
+pwsh bin/Debug/net10.0/playwright.ps1 install chromium
+```
 
 ### Run All Tests
 ```bash
-cd complex-comparison/aspire
+cd src
 dotnet test
+```
+
+### Run Specific Test Class
+```bash
+# Backend API tests only
+dotnet test --filter "FullyQualifiedName~IntegrationTests"
+
+# Playwright UI tests only
+dotnet test --filter "FullyQualifiedName~PlaywrightIntegrationTests"
 ```
 
 ### Run Specific Test
@@ -200,6 +260,7 @@ await Task.Delay(TimeSpan.FromSeconds(3));
 ### 5. Use Meaningful Test Names
 ```csharp
 CreateTask_TriggersAIAnalysis_ViaRabbitMQ() // Clear what's being tested
+Frontend_CreateTask_AddsItemToList() // UI test
 ```
 
 ## 🐛 Debugging Tips
@@ -213,7 +274,7 @@ docker logs <container-name>
 While tests are running (with breakpoint):
 ```bash
 docker ps  # Find PostgreSQL container
-docker exec -it <container-id> psql -U postgres -d complexdb
+docker exec -it <container-id> psql -U postgres -d notetakerdb
 ```
 
 ### Inspect RabbitMQ Management UI
@@ -221,6 +282,16 @@ docker exec -it <container-id> psql -U postgres -d complexdb
 # RabbitMQ management console typically at:
 http://localhost:15672
 # Credentials: guest/guest
+```
+
+### Debug Playwright Tests
+Enable headed mode for visual debugging:
+```csharp
+_browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+{
+    Headless = false,  // Shows the browser
+    SlowMo = 1000      // Slows down actions by 1 second
+});
 ```
 
 ### Enable Detailed Logging
@@ -237,18 +308,22 @@ Add to test project:
 
 ## 📚 Additional Resources
 
-- [Aspire Testing Documentation](https://learn.microsoft.com/en-us/dotnet/aspire/testing/)
-- [DistributedApplicationTestingBuilder API](https://learn.microsoft.com/en-us/dotnet/api/aspire.hosting.testing.distributedapplicationtestingbuilder)
+- [Aspire Testing Documentation](https://aspire.dev/testing/overview/)
+- [Write Your First Aspire Test](https://aspire.dev/testing/write-your-first-test/?testing-framework=mstest)
+- [Managing App Host in Tests](https://aspire.dev/testing/manage-app-host/?testing-framework=mstest)
+- [Accessing Resources in Tests](https://aspire.dev/testing/accessing-resources/)
+- [Playwright .NET Documentation](https://playwright.dev/dotnet/)
 - [xUnit Documentation](https://xunit.net/)
 - [FluentAssertions Documentation](https://fluentassertions.com/)
 
 ## 🎉 Summary
 
-Aspire testing provides:
-- ✅ **Confidence** - Test against real infrastructure
+Aspire testing with Playwright provides:
+- ✅ **Confidence** - Test against real infrastructure and real browsers
 - ✅ **Simplicity** - Automatic resource management
+- ✅ **Completeness** - Full stack testing from UI to database
 - ✅ **Speed** - Fast feedback with parallel execution
 - ✅ **Reliability** - Catch integration issues early
 - ✅ **Maintainability** - Self-updating tests via AppHost
 
-**Result:** High-quality, maintainable integration tests that give you confidence your distributed application works correctly!
+**Result:** High-quality, maintainable integration tests that give you confidence your distributed application works correctly from frontend to backend!
