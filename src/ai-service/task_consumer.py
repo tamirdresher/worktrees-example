@@ -29,15 +29,22 @@ class TaskConsumer:
         max_retries = 5
         retry_delay = 5
         
+        # Check for Aspire connection string
+        conn_str = os.getenv('ConnectionStrings__messaging')
+
         for attempt in range(max_retries):
             try:
-                credentials = pika.PlainCredentials('guest', 'guest')
-                parameters = pika.ConnectionParameters(
-                    host=self.rabbitmq_host,
-                    credentials=credentials,
-                    heartbeat=600,
-                    blocked_connection_timeout=300
-                )
+                if conn_str:
+                    parameters = pika.URLParameters(conn_str)
+                else:
+                    credentials = pika.PlainCredentials('guest', 'guest')
+                    parameters = pika.ConnectionParameters(
+                        host=self.rabbitmq_host,
+                        credentials=credentials,
+                        heartbeat=600,
+                        blocked_connection_timeout=300
+                    )
+                
                 self.connection = pika.BlockingConnection(parameters)
                 self.channel = self.connection.channel()
                 
@@ -86,10 +93,29 @@ class TaskConsumer:
         
         return category, sentiment
     
+    def parse_dotnet_conn_str(self, conn_str):
+        params = {}
+        for part in conn_str.split(';'):
+            if '=' in part:
+                key, value = part.split('=', 1)
+                key = key.strip().lower()
+                if key == 'host': params['host'] = value
+                elif key == 'database': params['database'] = value
+                elif key == 'username' or key == 'user id': params['user'] = value
+                elif key == 'password': params['password'] = value
+                elif key == 'port': params['port'] = value
+        return params
+
     def update_task_in_db(self, task_id, category, sentiment):
         """Update task with AI analysis results in PostgreSQL"""
         try:
-            conn = psycopg2.connect(**self.db_config)
+            conn_str = os.getenv('ConnectionStrings__notetakerdb')
+            if conn_str:
+                db_params = self.parse_dotnet_conn_str(conn_str)
+                conn = psycopg2.connect(**db_params)
+            else:
+                conn = psycopg2.connect(**self.db_config)
+
             cursor = conn.cursor()
             
             query = """

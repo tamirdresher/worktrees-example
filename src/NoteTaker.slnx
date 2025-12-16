@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="backend/Backend.csproj" />
+  <Project Path="NoteTaker.AppHost/NoteTaker.AppHost.csproj" />
+  <Project Path="NoteTaker.ServiceDefaults/NoteTaker.ServiceDefaults.csproj" />
+  <Project Path="NoteTaker.Tests/NoteTaker.Tests.csproj" />
+</Solution>

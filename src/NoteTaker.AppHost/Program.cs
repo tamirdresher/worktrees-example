@@ -29,15 +29,18 @@ var backend = builder.AddProject<Projects.Backend>("backend")
     .WithHttpEndpoint(name: "http")
     .WithExternalHttpEndpoints();
 
-var aiService = builder.AddUvicornApp("ai-service", "../ai-service", "main:app")
+var aiService = builder.AddDockerfile("ai-service", "../ai-service")
     .WithReference(db)
     .WithReference(messaging)
+    .WithEnvironment("RABBITMQ_HOST", "messaging")
+    .WithEnvironment("POSTGRES_HOST", "db")
+    .WithHttpEndpoint(targetPort: 8000, name: "http")
     .WithExternalHttpEndpoints();
 
 builder.AddJavaScriptApp("frontend", "../frontend")
     .WithRunScript("start")
     .WithReference(backend)
-    .WithReference(aiService)
+    .WithReference(aiService.GetEndpoint("http"))
     .WithHttpEndpoint(env: "PORT")
     .WithExternalHttpEndpoints();
 
