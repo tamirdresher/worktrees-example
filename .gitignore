@@ -393,7 +393,7 @@ scripts/archive/*.sh
 # Build artifacts and temporary files
 api-logs-recent.txt
 build-output.txt
-pr-description*.md
+pr_description*.md
 .vite
 scripts/settings.json
 
