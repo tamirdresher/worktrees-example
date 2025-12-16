@@ -29,12 +29,12 @@ var backend = builder.AddProject<Projects.Backend>("backend")
     .WithHttpEndpoint(name: "http")
     .WithExternalHttpEndpoints();
 
-var aiService = builder.AddDockerfile("ai-service", "../ai-service")
+var aiService = builder.AddPythonApp("ai-service", "../ai-service", "main.py")
     .WithReference(db)
     .WithReference(messaging)
     .WithEnvironment("RABBITMQ_HOST", "messaging")
     .WithEnvironment("POSTGRES_HOST", "db")
-    .WithHttpEndpoint(targetPort: 8000, name: "http")
+    .WithHttpEndpoint(env: "PORT", name: "http")
     .WithExternalHttpEndpoints();
 
 builder.AddJavaScriptApp("frontend", "../frontend")
